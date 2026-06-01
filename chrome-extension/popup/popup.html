@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Shield</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo-wrap">
+          <div class="shield-icon">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 2L4 6.5V13.5C4 19.3 8.4 24.7 14 26C19.6 24.7 24 19.3 24 13.5V6.5L14 2Z"
+                fill="url(#sg)"
+                stroke="rgba(255,251,222,0.4)"
+                stroke-width="0.5"
+              />
+              <path
+                d="M10 14l3 3 5-5"
+                stroke="#FFFBDE"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient
+                  id="sg"
+                  x1="4"
+                  y1="2"
+                  x2="24"
+                  y2="26"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stop-color="#91C8E4" />
+                  <stop offset="100%" stop-color="#4682A9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="title-block">
+            <h1>REVIEW<span class="accent">SHIELD</span></h1>
+            <div class="subtitle">AI Fake Review Detector</div>
+          </div>
+        </div>
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span class="status-text">ACTIVE</span>
+        </div>
+      </header>
+
+      <!-- Scan line decoration -->
+      <div class="scan-line"></div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="radar-wrap">
+          <div class="radar-ring r1"></div>
+          <div class="radar-ring r2"></div>
+          <div class="radar-ring r3"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-dot"></div>
+        </div>
+        <p class="empty-title">No scans yet</p>
+        <p class="empty-sub">
+          Navigate to a product page on Amazon, Flipkart, or similar to begin
+          analysis.
+        </p>
+      </div>
+
+      <!-- Stats Panel -->
+      <div class="stats-panel" id="statsPanel" style="display: none">
+        <!-- Platform pill -->
+        <div class="platform-row">
+          <div class="platform-badge" id="platformBadge">—</div>
+          <div class="scan-time" id="scanTime">—</div>
+        </div>
+
+        <!-- Trust Meter -->
+        <div class="trust-meter-wrap">
+          <div class="trust-label-row">
+            <span class="trust-label">TRUST SCORE</span>
+            <span class="trust-value" id="trustValue">—</span>
+          </div>
+          <div class="trust-bar-track">
+            <div class="trust-bar-fill" id="trustBarFill"></div>
+            <div class="trust-bar-glow" id="trustBarGlow"></div>
+          </div>
+          <div class="trust-ticks">
+            <span>0</span><span>25</span><span>50</span><span>75</span
+            ><span>100</span>
+          </div>
+        </div>
+
+        <!-- AI Confidence Meter -->
+        <div class="confidence-meter-wrap">
+          <div class="confidence-label-row">
+            <span class="confidence-label">AI CONFIDENCE</span>
+            <span class="confidence-value" id="confidenceValue">—</span>
+          </div>
+          <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" id="confidenceBarFill"></div>
+            <div class="confidence-bar-glow" id="confidenceBarGlow"></div>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card total">
+            <div class="stat-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle
+                  cx="8"
+                  cy="8"
+                  r="6"
+                  stroke="#7eb8ff"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M8 5v3l2 2"
+                  stroke="#7eb8ff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <div class="stat-num" id="statTotal">0</div>
+            <div class="stat-lbl">ANALYZED</div>
+          </div>
+          <div class="stat-card genuine">
+            <div class="stat-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8l4 4 6-6"
+                  stroke="#00ffc8"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div class="stat-num" id="statGenuine">0</div>
+            <div class="stat-lbl">GENUINE</div>
+          </div>
+          <div class="stat-card suspicious">
+            <div class="stat-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 4v5M8 11v1"
+                  stroke="#ffb800"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <circle
+                  cx="8"
+                  cy="8"
+                  r="6"
+                  stroke="#ffb800"
+                  stroke-width="1.5"
+                />
+              </svg>
+            </div>
+            <div class="stat-num" id="statSuspicious">0</div>
+            <div class="stat-lbl">SUSPICIOUS</div>
+          </div>
+          <div class="stat-card fake">
+            <div class="stat-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M5 5l6 6M11 5l-6 6"
+                  stroke="#ff4f6d"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <div class="stat-num" id="statFake">0</div>
+            <div class="stat-lbl">FAKE</div>
+          </div>
+        </div>
+
+        <!-- Donut chart -->
+        <div class="donut-wrap">
+          <svg class="donut-svg" viewBox="0 0 80 80" width="80" height="80">
+            <circle
+              class="donut-track"
+              cx="40"
+              cy="40"
+              r="30"
+              fill="none"
+              stroke="rgba(70,130,169,0.12)"
+              stroke-width="10"
+            />
+            <circle
+              class="donut-genuine"
+              id="donutGenuine"
+              cx="40"
+              cy="40"
+              r="30"
+              fill="none"
+              stroke="#00ffc8"
+              stroke-width="10"
+              stroke-dasharray="0 188.5"
+              stroke-linecap="butt"
+              transform="rotate(-90 40 40)"
+            />
+            <circle
+              class="donut-suspicious"
+              id="donutSuspicious"
+              cx="40"
+              cy="40"
+              r="30"
+              fill="none"
+              stroke="#ffb800"
+              stroke-width="10"
+              stroke-dasharray="0 188.5"
+              stroke-linecap="butt"
+              transform="rotate(-90 40 40)"
+            />
+            <circle
+              class="donut-fake"
+              id="donutFake"
+              cx="40"
+              cy="40"
+              r="30"
+              fill="none"
+              stroke="#ff4f6d"
+              stroke-width="10"
+              stroke-dasharray="0 188.5"
+              stroke-linecap="butt"
+              transform="rotate(-90 40 40)"
+            />
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-item">
+              <span class="leg-dot" style="background: #00ffc8"></span>Genuine
+            </div>
+            <div class="legend-item">
+              <span class="leg-dot" style="background: #ffb800"></span
+              >Suspicious
+            </div>
+            <div class="legend-item">
+              <span class="leg-dot" style="background: #ff4f6d"></span>Fake
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="footer">
+        <button class="btn-clear" id="btnClear">CLEAR DATA</button>
+        <button class="btn-report" id="btnReport">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <rect
+              x="2"
+              y="2"
+              width="8"
+              height="8"
+              stroke="currentColor"
+              stroke-width="1"
+            />
+            <path
+              d="M4 6h4M4 8h3"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-linecap="round"
+            />
+          </svg>
+          REPORT
+        </button>
+        <button class="btn-scan" id="btnScan">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle
+              cx="6"
+              cy="6"
+              r="5"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M6 3v3l2 2"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+          </svg>
+          RE-SCAN
+        </button>
+      </div>
+
+      <!-- Product Trust Report Modal -->
+      <div class="report-modal" id="reportModal" style="display: none">
+        <div class="report-content">
+          <div class="report-header">
+            <h2 id="reportTitle">Product Trust Report</h2>
+            <button class="report-close" id="reportClose">✕</button>
+          </div>
+          <div class="report-body" id="reportBody">
+            <!-- Generated report content -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
