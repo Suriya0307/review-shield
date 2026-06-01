@@ -1,6 +1,9 @@
 class ApiService {
   static async predictFakeReviews(reviews) {
     try {
+      console.log("🔥 API SERVICE STARTED");
+      console.log(reviews);
+
       // Batch all reviews in ONE request instead of sequential calls
       // This reduces 13 reviews × 3 seconds = 39 seconds → 2-4 seconds
 
@@ -14,12 +17,16 @@ class ApiService {
         length: r.reviewLength || 0,
       }));
 
+      console.log("================================");
+      console.log("SENDING TO BACKEND");
+      console.log(reviewsData);
+      console.log("================================");
+
       const response = await fetch(
-        "https://YOUR-RENDER-URL.onrender.com/chat",
+        "https://reviewshield-backend.onrender.com/chat",
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -83,6 +90,12 @@ Return JSON array with predictions for each review ID.`,
       );
 
       const data = await response.json();
+
+      console.log("================================");
+      console.log("BACKEND RESPONSE");
+      console.log(data);
+      console.log("================================");
+
       const raw = data.choices[0].message.content;
       const cleaned = raw
         .replace(/```json/g, "")
@@ -130,11 +143,10 @@ Return JSON array with predictions for each review ID.`,
         .join("\n\n---\n\n");
 
       const response = await fetch(
-        "https://YOUR-RENDER-URL.onrender.com/chat",
+        "https://reviewshield-backend.onrender.com/chat",
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

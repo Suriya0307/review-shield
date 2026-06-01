@@ -9,13 +9,20 @@ class ReviewScanner {
     const reviewElements = this.getReviewElements();
 
     this.reviews = reviewElements.map((el, index) => {
-      const reviewBody = el.querySelector('[data-hook="review-body"]');
-
       const reviewText =
-        reviewBody?.innerText?.trim() || reviewBody?.textContent?.trim() || "";
+        el
+          .querySelector('[data-hook="reviewTextContainer"]')
+          ?.innerText?.trim() ||
+        el.querySelector('[data-hook="review-body"] span')?.innerText?.trim() ||
+        el.querySelector('[data-hook="review-body"]')?.innerText?.trim() ||
+        el.querySelector('[data-hook="review-collapsed"]')?.innerText?.trim() ||
+        el.innerText ||
+        "";
 
       const reviewTitle =
-        el.querySelector('[data-hook="review-title"]')?.innerText?.trim() || "";
+        el.querySelector("a.a-link-normal.a-text-bold")?.innerText?.trim() ||
+        el.querySelector('[data-hook="review-title"]')?.innerText?.trim() ||
+        "";
 
       const reviewer =
         el.querySelector(".a-profile-name")?.innerText?.trim() || "Unknown";
@@ -31,15 +38,6 @@ class ReviewScanner {
 
       const reviewDate =
         el.querySelector('[data-hook="review-date"]')?.innerText?.trim() || "";
-
-      console.log("================================");
-      console.log("REVIEW INDEX:", index);
-      console.log("TITLE:", reviewTitle);
-      console.log("TEXT:", reviewText);
-      console.log("TEXT LENGTH:", reviewText.length);
-      console.log("RATING:", rating);
-      console.log("VERIFIED:", verified);
-      console.log("================================");
 
       return {
         id: index,

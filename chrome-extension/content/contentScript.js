@@ -477,13 +477,17 @@ async function analyzeReviews() {
     // Create scanner
     const scanner = new ReviewScanner();
 
-    // Extract structured reviews - LIMIT TO FIRST 20 for speed
-    // This reduces API processing time significantly
-    let reviews = scanner.scanPage();
-    reviews = reviews.slice(0, 20);
+    // Extract structured reviews
+    const reviews = scanner.scanPage();
+
+    console.log("🚀 CALLING API");
+    console.log(reviews);
 
     // Get predictions (now batched in single API call)
     const predictions = await ApiService.predictFakeReviews(reviews);
+
+    console.log("✅ API RETURNED");
+    console.log(predictions);
 
     // Cache results for instant future loads
     cachePredictions(predictions);
